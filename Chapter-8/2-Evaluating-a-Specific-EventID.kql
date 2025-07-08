@@ -1,0 +1,4 @@
+SecurityEvent
+| where TimeGenerated > ago(1h)
+| where EventID == 8002
+| summarize VolumeInGB = sum(_BilledSize) / 1e9

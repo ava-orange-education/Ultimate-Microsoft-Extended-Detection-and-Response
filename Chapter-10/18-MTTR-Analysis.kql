@@ -1,0 +1,4 @@
+SecurityIncident
+| where TimeGenerated > ago(90d)
+| where Status == "Closed"
+| summarize MTTR = strcat(round(avg(datetime_diff('minute', ClosedTime, CreatedTime)),2),' minutes') 

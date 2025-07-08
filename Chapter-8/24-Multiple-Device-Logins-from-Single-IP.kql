@@ -1,0 +1,3 @@
+SigninLogs
+| summarize UniqueUsers = dcount(UserPrincipalName) by IPAddress
+| where UniqueUsers > 5 

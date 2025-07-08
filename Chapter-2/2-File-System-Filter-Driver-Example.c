@@ -1,4 +1,3 @@
-//File System Filter Driver Example
 //A file system filter driver can be used to hook into file system operations. The following is a simplified example in C that demonstrates how to hook into file creation, deletion, and modification operations:
 
 #include <ntddk.h>

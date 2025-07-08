@@ -1,0 +1,9 @@
+//Correct Example: 
+SecurityEvent
+| where EventID == 4624
+| summarize count() by Account 
+
+//Incorrect Example: 
+SecurityEvent
+| summarize count() by Account
+| where EventID == 4624  

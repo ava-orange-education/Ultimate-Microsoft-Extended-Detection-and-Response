@@ -1,0 +1,5 @@
+SigninLogs
+| where ResultType != 0
+| summarize Failures = count() by IPAddress
+| sort by Failures desc
+| take 10 

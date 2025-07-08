@@ -1,0 +1,4 @@
+SecurityAlert
+| where TimeGenerated > ago(90d)
+| summarize Count = count() by AlertName
+| top 10 by Count desc 

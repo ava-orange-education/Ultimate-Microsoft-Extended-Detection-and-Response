@@ -1,0 +1,4 @@
+SecurityEvent
+| where TimeGenerated > ago(30d)
+| summarize count() by EventID
+| sort by count_ desc

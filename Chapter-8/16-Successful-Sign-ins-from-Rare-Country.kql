@@ -1,0 +1,6 @@
+let normalCountries = SigninLogs
+| summarize distinctLocations = make_set(Location);
+SigninLogs
+| where ResultType == 0
+| where not(Location in (normalCountries))
+| summarize count() by Location, UserPrincipalName, IPAddress 

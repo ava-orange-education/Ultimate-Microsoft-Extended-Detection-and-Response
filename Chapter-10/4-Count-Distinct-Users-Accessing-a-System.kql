@@ -1,0 +1,3 @@
+SecurityEvent
+| where EventID == 4624
+| summarize UniqueUsers = dcount(Account) 

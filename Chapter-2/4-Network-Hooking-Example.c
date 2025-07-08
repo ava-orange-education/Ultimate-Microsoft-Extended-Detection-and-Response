@@ -1,4 +1,3 @@
-//Network Hooking Example
 //A kernel-mode driver can be used to hook into network-related functions such as NtDeviceIoControlFile, which is used for various network operations. Here’s a simplified example in C:
 
 #include <ntddk.h>

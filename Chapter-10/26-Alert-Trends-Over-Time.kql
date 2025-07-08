@@ -1,0 +1,40 @@
+let timeRange = 90d;
+SecurityAlert
+| where TimeGenerated > ago(timeRange)
+| summarize CurrentCount = count() by AlertName
+| join kind=fullouter (
+    SecurityAlert
+    | where TimeGenerated > ago(2 * timeRange) and TimeGenerated <= ago(timeRange)
+    | summarize PreviousCount = count() by AlertName
+) on AlertName
+| project AlertName, 
+          CurrentCount = coalesce(CurrentCount, 0), 
+          PreviousCount = coalesce(PreviousCount, 0),
+          PercentChange = iff(PreviousCount == 0, 100.0, (CurrentCount - PreviousCount) * 100.0 / PreviousCount)
+// Apply filters to focus on meaningful trends
+| where CurrentCount > 10 
+| where PercentChange > 50 
+// Assign severity level indicators
+| extend SeverityIndicator = case(
+    PercentChange >= 500, "🔥 Extreme Spike",
+    PercentChange >= 200, "🔴 Critical Increase",
+    PercentChange >= 100, "🟠 Major Increase",
+    PercentChange >= 50, "🟡 Moderate Increase",
+    "🟢 Low Increase"
+)
+// Apply color coding to % Change
+| extend ChangeColor = case(
+    PercentChange > 200, "🔴",
+    PercentChange > 100, "🟠",
+    PercentChange > 50, "🟡",
+    "🟢"
+)
+// Sort by absolute % change in descending order to highlight most significant shifts
+| sort by abs(PercentChange) desc
+| top 10 by abs(PercentChange) desc
+// Improve column naming for readability
+| project ["Alert Type"] = AlertName, 
+          ["Current Period Alerts"] = CurrentCount, 
+          ["Previous Period Alerts"] = PreviousCount, 
+          ["% Change"] = strcat(ChangeColor, " ", round(PercentChange, 2), "%"),
+          ["Severity"] = SeverityIndicator

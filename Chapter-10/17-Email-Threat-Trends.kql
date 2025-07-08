@@ -1,0 +1,6 @@
+EmailEvents
+| where TimeGenerated > ago(90d)
+| where ThreatTypes != ""
+| summarize Count = count() by ThreatTypes, bin(Timestamp, 1d)
+| order by Timestamp desc
+| render timechart 

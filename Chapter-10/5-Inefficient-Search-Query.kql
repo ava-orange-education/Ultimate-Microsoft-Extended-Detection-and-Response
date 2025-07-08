@@ -1,0 +1,5 @@
+search *             // Retrieves all data across tables.
+| where TimeGenerated > ago(30d)        // Filters records from the past 30 days.
+| where _IsBillable == true // Includes only billable data.
+| summarize TotalGB = round(sum(_BilledSize / 1e9)) by bin(TimeGenerated, 1d)    // Calculates daily ingested data in gigabytes.
+| summarize AvgGBPerDay = avg(TotalGB)    // Computes the average daily ingestion.

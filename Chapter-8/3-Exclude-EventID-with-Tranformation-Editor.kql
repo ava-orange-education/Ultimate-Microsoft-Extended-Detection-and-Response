@@ -1,0 +1,2 @@
+source
+| where EventID != 8002

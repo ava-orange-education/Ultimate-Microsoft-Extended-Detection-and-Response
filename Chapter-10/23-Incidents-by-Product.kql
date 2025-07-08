@@ -1,0 +1,12 @@
+let TotalAlerts = SecurityAlert
+    | where TimeGenerated > ago(90d)
+    | summarize TotalCount = count()
+    | extend Key = 1;
+SecurityAlert
+| where TimeGenerated > ago(90d)
+| summarize Count = count() by ProductName
+| extend Key = 1
+| join kind=inner (TotalAlerts) on Key
+| extend PercentageOfTotal = strcat(round(Count * 100.0 / TotalCount, 2),'%')
+| top 10 by Count
+| project ProductName, PercentageOfTotal 

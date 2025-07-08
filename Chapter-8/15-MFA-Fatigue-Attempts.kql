@@ -1,0 +1,4 @@
+SigninLogs
+| where ResultType == 500121 // MFA denied by user
+| summarize count() by UserPrincipalName, IPAddress, bin(TimeGenerated, 1h)
+| order by count_ desc 

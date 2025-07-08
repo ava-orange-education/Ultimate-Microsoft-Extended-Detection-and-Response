@@ -1,0 +1,3 @@
+SecurityIncident
+| summarize IncidentsCreated = count(), IncidentsClosed = countif(Status == "Closed") by bin(TimeGenerated, 1d)
+| render timechart 

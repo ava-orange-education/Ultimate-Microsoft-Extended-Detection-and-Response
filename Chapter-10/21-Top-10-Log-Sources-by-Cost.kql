@@ -1,0 +1,8 @@
+Usage
+| where IsBillable == true
+//| where DataType !contains 'device'
+| summarize GB = round(sum(Quantity) / 1000, 2) by DataType
+| extend Cost = round(GB * 2.45, 2) // <-- swap out “2.45” for your cost per GB*
+| sort by Cost desc
+| extend CostDollar = strcat('$', tostring(Cost))
+| project DataType, GB, CostDollar 

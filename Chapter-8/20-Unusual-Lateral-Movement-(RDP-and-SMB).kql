@@ -1,0 +1,9 @@
+DeviceProcessEvents
+| where ProcessCommandLine contains @"\\"
+    and (ProcessCommandLine contains "C$" 
+         or ProcessCommandLine contains "ADMIN$"
+         or ProcessCommandLine contains "IPC$" 
+         or ProcessCommandLine contains "mstsc")
+| summarize Count = count() 
+    by DeviceName, InitiatingProcessFileName, ProcessCommandLine
+| order by Count desc

@@ -1,0 +1,3 @@
+AuditLogs
+| where OperationName has "Add member" or OperationName has "Role"
+| summarize count() by Identity, OperationName 

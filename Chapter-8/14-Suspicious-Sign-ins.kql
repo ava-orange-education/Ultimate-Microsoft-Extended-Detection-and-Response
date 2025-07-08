@@ -1,0 +1,5 @@
+SigninLogs
+| where ResultType != 0
+| where Location !in ("United States", "Canada") //<-- adjust to expected Location
+| summarize count() by UserPrincipalName, Location, IPAddress, bin(TimeGenerated, 1h)
+| order by count_ desc 

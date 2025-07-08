@@ -1,0 +1,7 @@
+OfficeActivity
+| where TimeGenerated > ago(90d)
+| where OfficeWorkload == "SharePoint" or OfficeWorkload == "OneDrive"
+| where Operation != ""
+| where Operation contains "shar"
+| summarize count() by UserId
+| take 10 

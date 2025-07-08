@@ -1,0 +1,3 @@
+AuditLogs
+| where OperationName == "Consent to application"
+| where Identity != "Global Administrator" 

@@ -1,0 +1,3 @@
+SigninLogs
+| where Location !in ("United States", "Canada")
+| project UserPrincipalName, Location, TimeGenerated 

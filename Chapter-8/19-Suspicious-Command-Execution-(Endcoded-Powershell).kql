@@ -1,0 +1,3 @@
+DeviceProcessEvents
+| where ProcessCommandLine has "FromBase64String" or ProcessCommandLine has "IEX"
+| summarize count() by InitiatingProcessFileName, ProcessCommandLine, DeviceName 

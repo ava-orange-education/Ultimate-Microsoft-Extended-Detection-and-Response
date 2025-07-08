@@ -1,0 +1,13 @@
+let startTime = ago(90d);
+let endTime = now();
+let FailedLogins = SecurityEvent
+| where TimeGenerated between (startTime .. endTime)
+| where EventID == 50126	// <-- Failed Logon Attempts
+| summarize FailedLogins = count() by Account;
+let SuccessfulLogins = SecurityEvent
+| where TimeGenerated between (startTime .. endTime)
+| where EventID == 4624	// <-- Successful Logon Attempts
+| summarize SuccessfulLogins = count() by Account;
+FailedLogins
+| join kind=inner (SuccessfulLogins) on Account
+| project Account, FailedLogins, SuccessfulLogins

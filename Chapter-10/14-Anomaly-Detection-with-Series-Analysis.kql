@@ -1,0 +1,8 @@
+let startTime = ago(7d);
+let endTime = now();
+SecurityEvent
+| where TimeGenerated between (startTime .. endTime)
+| where EventID == 50126
+| summarize FailedLogins = count() by bin(TimeGenerated, 1h)
+| render timechart
+ 

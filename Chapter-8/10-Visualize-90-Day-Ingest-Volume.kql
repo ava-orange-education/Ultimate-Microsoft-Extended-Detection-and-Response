@@ -1,0 +1,5 @@
+Usage                      
+| where TimeGenerated > ago(90d)    
+| where IsBillable == true              
+| summarize TotalVolumeGB = sum(Quantity) / 1000 by bin(StartTime, 1d), Solution   
+| render columnchart                                                                

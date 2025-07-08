@@ -1,0 +1,7 @@
+Usage
+| where TimeGenerated > ago(31d)
+| where IsBillable == true
+| summarize BillableDataGB = sum(Quantity) / 1000 by DataType
+| sort by BillableDataGB desc 
+| project DataType = DataType, GbPerDay = strcat(round(BillableDataGB,2), 'GB/Day')
+| take 10  

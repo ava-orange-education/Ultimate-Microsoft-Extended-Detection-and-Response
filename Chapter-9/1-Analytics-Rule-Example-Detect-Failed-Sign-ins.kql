@@ -1,0 +1,4 @@
+SigninLogs
+| where ResultType == 50126
+| summarize FailedAttempts = count() by UserPrincipalName, bin(TimeGenerated, 2m)
+| where FailedAttempts >= 3 

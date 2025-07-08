@@ -1,0 +1,9 @@
+let threshold = 100;
+let startTime = ago(90d);
+let endTime = now();
+SecurityEvent
+| where TimeGenerated between (startTime .. endTime)
+| where EventID == 50126
+| summarize FailedLogins = count() by Account
+| where FailedLogins > threshold
+| project Account, FailedLogins 

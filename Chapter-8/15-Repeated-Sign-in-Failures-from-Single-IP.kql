@@ -1,0 +1,4 @@
+SigninLogs
+| where ResultType == 50074 or ResultType == 50126
+| summarize count() by IPAddress, UserPrincipalName, bin(TimeGenerated, 1h)
+| where count_ > 10 

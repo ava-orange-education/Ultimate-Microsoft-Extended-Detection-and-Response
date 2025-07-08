@@ -1,0 +1,31 @@
+let totalCount = toscalar(
+    SecurityAlert
+    | where TimeGenerated > ago(90d)
+    | where isnotempty(Tactics)
+    | mv-expand tactic = split(Tactics, ", ")
+    | summarize Total = count()
+);
+SecurityAlert
+| where TimeGenerated > ago(90d)
+| where isnotempty(Tactics)
+| mv-expand tactic = split(Tactics, ", ")
+| summarize Count = count() by tostring(tactic)
+| extend Percentage = strcat(round(Count * 100.0 / totalCount, 2),'%')
+| extend TacticEmoji = case(
+    tactic == "InitialAccess", "🚪",
+    tactic == "Execution", "💥",
+    tactic == "Persistence", "📌",
+    tactic == "PrivilegeEscalation", "🚀",
+    tactic == "DefenseEvasion", "🕵️",
+    tactic == "CredentialAccess", "🔑",
+    tactic == "Discovery", "🔍",
+    tactic == "LateralMovement", "🔄",
+    tactic == "Collection", "📂",
+    tactic == "Exfiltration", "",
+    tactic == "Impact", "⚡",
+    tactic == "CommandAndControl", "📡",
+    "❓"  // Default emoji for unknown tactics
+)
+| project Tactic = strcat(TacticEmoji, " ", tactic), Count, Percentage
+| sort by Count desc
+| top 10 by Count

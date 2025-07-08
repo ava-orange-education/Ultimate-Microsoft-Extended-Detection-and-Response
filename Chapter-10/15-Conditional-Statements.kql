@@ -1,0 +1,5 @@
+SecurityEvent
+| where TimeGenerated between (ago(7d) .. now())
+| extend LoginType = case(EventID == 50126, "Failed", EventID == 4624, "Successful", "Other")
+| summarize LoginCount = count() by LoginType
+| project LoginType, LoginCount 

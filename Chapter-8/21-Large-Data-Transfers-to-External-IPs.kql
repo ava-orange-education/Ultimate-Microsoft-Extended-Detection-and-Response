@@ -1,0 +1,4 @@
+DeviceNetworkEvents
+| where RemoteIPType == "Public"
+| summarize totalBytes = sum(InitiatingProcessFileSize) by RemoteIP, InitiatingProcessAccountName
+| where totalBytes > 100000000 
